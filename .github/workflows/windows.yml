@@ -1,0 +1,29 @@
+
+name: Build RV Client
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Configure
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DVULKAN=OFF
+
+      - name: Build
+        run: cmake --build build --config Release --target game-client
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: RVClient-Windows
+          path: build/**/game-client.exe
