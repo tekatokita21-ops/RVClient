@@ -1,3 +1,4 @@
+
 name: Build RV Client
 
 on:
@@ -19,33 +20,42 @@ jobs:
       - name: Configure
         run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DVULKAN=OFF -DPREFER_BUNDLED_LIBS=ON -DDOWNLOAD_GTEST=ON
 
-      - name: Build
+      - name: Build client
         run: cmake --build build --config Release --target game-client
 
-      - name: Check executable
+      - name: Package game
+        run: cmake --build build --config Release --target package_default
+
+      - name: Prepare RV Client ZIP
         shell: pwsh
         run: |
-          $exe = "build/release/DDNet.exe"
+          $zip = Get-ChildItem build -Recurse -File -Filter "*win64.zip" |
+            Where-Object { $_.Name -notlike "*symbols*" } |
+            Select-Object -First 1
 
-          if (!(Test-Path $exe)) {
-            Write-Host "Executable not found. Searching build folder..."
-            Get-ChildItem -Path build -Recurse -Filter *.exe |
-              Select-Object -ExpandProperty FullName
-            throw "DDNet.exe was not found."
+          if (-not $zip) {
+            throw "Game package ZIP not found."
           }
 
-          Write-Host "Executable found: $exe"
+          $stage = Join-Path $env:RUNNER_TEMP "RVClient"
+          New-Item -ItemType Directory -Path $stage -Force | Out-Null
+          Expand-Archive -Path $zip.FullName -DestinationPath $stage -Force
 
-      - name: Rename executable
-        shell: pwsh
-        run: |
-          Rename-Item `
-            -Path "build/release/DDNet.exe" `
-            -NewName "RVClient.exe"
+          $exe = Get-ChildItem $stage -Recurse -File -Filter "DDNet.exe" |
+            Select-Object -First 1
+
+          if (-not $exe) {
+            throw "DDNet.exe not found inside package."
+          }
+
+          Rename-Item -Path $exe.FullName -NewName "RVClient.exe"
+
+          $output = Join-Path $env:RUNNER_TEMP "RVClient-Windows.zip"
+          Compress-Archive -Path "$stage\*" -DestinationPath $output -Force
 
       - name: Upload RV Client
         uses: actions/upload-artifact@v4
         with:
           name: RVClient-Windows
-          path: build/release/RVClient.exe
+          path: ${{ runner.temp }}/RVClient-Windows.zip
           if-no-files-found: error
