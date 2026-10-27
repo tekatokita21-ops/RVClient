@@ -17,7 +17,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Configure
-        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DVULKAN=OFF
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DVULKAN=OFF -DPREFER_BUNDLED_LIBS=ON -DDOWNLOAD_GTEST=ON
 
       - name: Build
         run: cmake --build build --config Release --target game-client
