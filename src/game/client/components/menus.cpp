@@ -2469,31 +2469,51 @@ void CMenus::RenderBackground()
 	Graphics()->QuadsEnd();
 
 	// render the tiles
+	
+	// render animated purple hexagon background
 	Graphics()->TextureClear();
 	Graphics()->QuadsBegin();
-	Graphics()->SetColor(0.45f, 0.12f, 0.85f, 0.12f);
-	const float Size = 15.0f;
-	const float OffsetTime = std::fmod(Client()->GlobalTime() * 0.15f, 2.0f);
-	IGraphics::CQuadItem aCheckerItems[64];
-	size_t NumCheckerItems = 0;
-	const int NumItemsWidth = std::ceil(ScreenWidth / Size);
-	const int NumItemsHeight = std::ceil(ScreenHeight / Size);
-	for(int y = -2; y < NumItemsHeight; y++)
+
+	const float HexSize = 18.0f;
+	const float Time = Client()->GlobalTime();
+	const float OffsetX = std::fmod(Time * 3.0f, HexSize * 1.5f);
+	const float OffsetY = std::fmod(Time * 1.5f, HexSize * 1.732f);
+
+	for(int y = -2; y < (int)(ScreenHeight / (HexSize * 1.732f)) + 3; y++)
 	{
-		for(int x = 0; x < NumItemsWidth + 4; x += 2)
+		for(int x = -2; x < (int)(ScreenWidth / (HexSize * 1.5f)) + 3; x++)
 		{
-			aCheckerItems[NumCheckerItems] = IGraphics::CQuadItem((x - 2 * OffsetTime + (y & 1)) * Size, (y + OffsetTime) * Size, Size, Size);
-			NumCheckerItems++;
-			if(NumCheckerItems == std::size(aCheckerItems))
+			const float CX = x * HexSize * 1.5f - OffsetX;
+			const float CY = y * HexSize * 1.732f + (x % 2) * HexSize * 0.866f - OffsetY;
+
+			const float Pulse = 0.5f + 0.5f * std::sin(Time * 1.8f + x * 0.7f + y * 0.5f);
+			const ColorRGBA HexColor(
+				0.38f + 0.25f * Pulse,
+				0.12f + 0.18f * Pulse,
+				0.75f + 0.25f * Pulse,
+				0.16f + 0.18f * Pulse);
+
+			Graphics()->LinesBegin();
+			Graphics()->SetColor(HexColor);
+
+			for(int Side = 0; Side < 6; Side++)
 			{
-				Graphics()->QuadsDrawTL(aCheckerItems, NumCheckerItems);
-				NumCheckerItems = 0;
+				const float A1 = 3.14159265f / 3.0f * Side;
+				const float A2 = 3.14159265f / 3.0f * (Side + 1);
+
+				IGraphics::CLineItem Line(
+					CX + std::cos(A1) * HexSize,
+					CY + std::sin(A1) * HexSize,
+					CX + std::cos(A2) * HexSize,
+					CY + std::sin(A2) * HexSize);
+
+				Graphics()->LinesDraw(&Line, 1);
 			}
+
+			Graphics()->LinesEnd();
 		}
 	}
-	if(NumCheckerItems != 0)
-		Graphics()->QuadsDrawTL(aCheckerItems, NumCheckerItems);
-	Graphics()->QuadsEnd();
+
 
 	// render border fade
 	Graphics()->TextureSet(m_TextureBlob);
