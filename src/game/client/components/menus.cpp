@@ -2473,6 +2473,7 @@ void CMenus::RenderBackground()
 	// render animated purple hexagon background
 	
 	// render animated purple hexagon background
+	
 	Graphics()->TextureClear();
 	Graphics()->LinesBegin();
 
@@ -2515,7 +2516,7 @@ void CMenus::RenderBackground()
 	}
 
 	Graphics()->LinesEnd();
-}
+
 
 
 	// render border fade
