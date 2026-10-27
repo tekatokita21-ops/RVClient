@@ -2455,12 +2455,13 @@ void CMenus::UpdateColors()
 }
 
 void CMenus::RenderBackground()
+
 {
 	const float ScreenHeight = 300.0f;
 	const float ScreenWidth = ScreenHeight * Graphics()->ScreenAspect();
 	Graphics()->MapScreenToSize(ScreenWidth, ScreenHeight);
 
-	// render background color
+	// Dark purple background
 	Graphics()->TextureClear();
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(ColorRGBA(0.025f, 0.008f, 0.055f, 1.0f));
@@ -2468,19 +2469,16 @@ void CMenus::RenderBackground()
 	Graphics()->QuadsDrawTL(&BackgroundQuadItem, 1);
 	Graphics()->QuadsEnd();
 
-	// render the tiles
-	
-	// render animated purple hexagon background
-	
-	// render animated purple hexagon background
-	
+	// Infinite animated purple hexagon background
 	Graphics()->TextureClear();
 	Graphics()->LinesBegin();
 
 	const float HexSize = 18.0f;
-	const float Time = Client()->GlobalTime();
-	const float OffsetX = std::fmod(Time * 3.0f, HexSize * 1.5f);
-	const float OffsetY = std::fmod(Time * 1.5f, HexSize * 1.732f);
+	const float Cycle = std::fmod(Client()->GlobalTime(), 60.0f);
+	const float Time = Cycle;
+
+	const float OffsetX = std::fmod(Cycle * (HexSize * 1.5f / 60.0f), HexSize * 1.5f);
+	const float OffsetY = std::fmod(Cycle * (HexSize * 1.732f / 60.0f), HexSize * 1.732f);
 
 	for(int y = -2; y < (int)(ScreenHeight / (HexSize * 1.732f)) + 3; y++)
 	{
@@ -2489,7 +2487,7 @@ void CMenus::RenderBackground()
 			const float CX = x * HexSize * 1.5f - OffsetX;
 			const float CY = y * HexSize * 1.732f + (x % 2) * HexSize * 0.866f - OffsetY;
 
-			const float Pulse = 0.5f + 0.5f * std::sin(Time * 1.8f + x * 0.7f + y * 0.5f);
+			const float Pulse = 0.5f + 0.5f * std::sin(Time * 6.2831853f / 60.0f + x * 0.7f + y * 0.5f);
 			const ColorRGBA HexColor(
 				0.38f + 0.25f * Pulse,
 				0.12f + 0.18f * Pulse,
@@ -2516,7 +2514,7 @@ void CMenus::RenderBackground()
 	}
 
 	Graphics()->LinesEnd();
-
+}
 
 
 	// render border fade
