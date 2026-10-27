@@ -857,7 +857,7 @@ void CMenus::OnInit()
 	Console()->Chain("demo_speed", ConchainDemoSpeed, this);
 
 	m_TextureBlob = Graphics()->LoadTexture("blob.png", IStorage::TYPE_ALL);
-	m_RvMaskTexture = Graphics()->LoadTexture("images/rv/rv_mask.png", IStorage::TYPE_ALL);
+	m_RvMaskTexture = Graphics()->LoadTexture("rv/rv_mask.png", IStorage::TYPE_ALL);
 
 	// setup load amount
 	m_LoadingState.m_Current = 0;
