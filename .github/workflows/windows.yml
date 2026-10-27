@@ -22,8 +22,16 @@ jobs:
       - name: Build
         run: cmake --build build --config Release --target game-client
 
+      - name: Find executable
+        shell: pwsh
+        run: |
+          Write-Host "Searching for EXE files..."
+          Get-ChildItem -Path build -Recurse -File -Filter *.exe |
+            Select-Object -ExpandProperty FullName
+
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
           name: RVClient-Windows
-          path: build/**/game-client.exe
+          path: build/**/*.exe
+          if-no-files-found: error
