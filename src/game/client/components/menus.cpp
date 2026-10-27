@@ -2514,7 +2514,6 @@ void CMenus::RenderBackground()
 	}
 
 	Graphics()->LinesEnd();
-}
 
 
 	// render border fade
