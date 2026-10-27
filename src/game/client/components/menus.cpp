@@ -2463,7 +2463,7 @@ void CMenus::RenderBackground()
 	// render background color
 	Graphics()->TextureClear();
 	Graphics()->QuadsBegin();
-	Graphics()->SetColor(ms_GuiColor.WithAlpha(1.0f));
+	Graphics()->SetColor(ColorRGBA(0.025f, 0.008f, 0.055f, 1.0f));
 	const IGraphics::CQuadItem BackgroundQuadItem = IGraphics::CQuadItem(0, 0, ScreenWidth, ScreenHeight);
 	Graphics()->QuadsDrawTL(&BackgroundQuadItem, 1);
 	Graphics()->QuadsEnd();
@@ -2471,7 +2471,7 @@ void CMenus::RenderBackground()
 	// render the tiles
 	Graphics()->TextureClear();
 	Graphics()->QuadsBegin();
-	Graphics()->SetColor(0.0f, 0.0f, 0.0f, 0.045f);
+	Graphics()->SetColor(0.45f, 0.12f, 0.85f, 0.12f);
 	const float Size = 15.0f;
 	const float OffsetTime = std::fmod(Client()->GlobalTime() * 0.15f, 2.0f);
 	IGraphics::CQuadItem aCheckerItems[64];
