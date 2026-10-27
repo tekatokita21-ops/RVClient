@@ -33,5 +33,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: RVClient-Windows
-          path: build/**/*.exe
+          path: build/release/DDNet.exe
           if-no-files-found: error
