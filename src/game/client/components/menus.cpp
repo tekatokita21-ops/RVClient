@@ -2471,8 +2471,10 @@ void CMenus::RenderBackground()
 	// render the tiles
 	
 	// render animated purple hexagon background
+	
+	// render animated purple hexagon background
 	Graphics()->TextureClear();
-	Graphics()->QuadsBegin();
+	Graphics()->LinesBegin();
 
 	const float HexSize = 18.0f;
 	const float Time = Client()->GlobalTime();
@@ -2493,26 +2495,27 @@ void CMenus::RenderBackground()
 				0.75f + 0.25f * Pulse,
 				0.16f + 0.18f * Pulse);
 
-			Graphics()->LinesBegin();
 			Graphics()->SetColor(HexColor);
 
+			IGraphics::CLineItem aLines[6];
 			for(int Side = 0; Side < 6; Side++)
 			{
 				const float A1 = 3.14159265f / 3.0f * Side;
 				const float A2 = 3.14159265f / 3.0f * (Side + 1);
 
-				IGraphics::CLineItem Line(
+				aLines[Side] = IGraphics::CLineItem(
 					CX + std::cos(A1) * HexSize,
 					CY + std::sin(A1) * HexSize,
 					CX + std::cos(A2) * HexSize,
 					CY + std::sin(A2) * HexSize);
-
-				Graphics()->LinesDraw(&Line, 1);
 			}
 
-			Graphics()->LinesEnd();
+			Graphics()->LinesDraw(aLines, 6);
 		}
 	}
+
+	Graphics()->LinesEnd();
+}
 
 
 	// render border fade
