@@ -2516,7 +2516,6 @@ void CMenus::RenderBackground()
 
 	Graphics()->LinesEnd();
 
-
 	// render border fade
 	Graphics()->TextureSet(m_TextureBlob);
 	Graphics()->QuadsBegin();

@@ -655,7 +655,7 @@ protected:
 	void UpdateColors();
 
 	IGraphics::CTextureHandle m_TextureBlob;
-    IGraphics::CTextureHandle m_RvMaskTexture;
+	IGraphics::CTextureHandle m_RvMaskTexture;
 
 public:
 	void RenderBackground();
