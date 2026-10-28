@@ -1656,6 +1656,7 @@ set(EXPECTED_DATA
   gui_icons.png
   gui_logo.png
   hud.png
+  images/rv/rv_mask.png
   languages/README.txt
   languages/arabic.txt
   languages/azerbaijani.txt
@@ -2062,7 +2063,6 @@ set(EXPECTED_DATA
   themes/winter_night.map
   touch_controls.json
   wordlist.txt
-  images/rv/rv_mask.png
   # tidy-alphabetical-end
 )
 
